@@ -1,23 +1,29 @@
+#include "libft/libft.h"
 #include "minitalk.h"
-#include <stdlib.h>
 
-
-void	get_user_answer(void)
+int	check_pid(char *arg)
 {
-	int		pid;
-	char	*msg;
+	int	server_pid;
 
-	printf("Enter a PID: ");
-	scanf("%d", &pid);
-	while (1)
+	server_pid = ft_atoi(arg);
+	if (server_pid <= 0)
 	{
-		msg = (char *)malloc(1024 * sizeof(char));
-		if (!msg)
-			return ;
-		printf("Enter a message: ");
-		scanf(" %[^\n]", msg);
-		send_message(pid, msg);
+		write(2, "Error: invalid PID.\n", 21);
+		return (1);
 	}
+	return (0);
+}
+
+int	check_args(int argc, char **argv)
+{
+	if (argc != 3)
+	{
+		write(2, "Error: format->./client <PID> <MSG>\n", 36);
+		return (1);
+	}
+	if (check_pid(argv[1]))
+		return (1);
+	return (0);
 }
 
 int main(int argc, char **argv)
@@ -25,11 +31,8 @@ int main(int argc, char **argv)
 	char	*msg;
 	int		server_pid;
 
-	if (argc != 3)
-	{
-		get_user_answer();
-		return (0);
-	}
+	if (check_args(argc, argv))
+		return (1);
 	server_pid = ft_atoi(argv[1]);
 	msg = argv[2];
 	send_message(server_pid, msg);

@@ -26,7 +26,7 @@ char	*char_to_byte(char c)
 	int				i;
 	int				pow;
 
-	byte = (char *)calloc(9, sizeof(char));
+	byte = (char *)ft_calloc(9, sizeof(char));
 	if (!byte)
 		return (NULL);
 	a = (unsigned char)c;
