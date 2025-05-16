@@ -10,7 +10,6 @@ char	*char_to_byte(char c)
 	int				i;
 	int				pow;
 
-
 	byte = (char *)calloc(9, sizeof(char));
 	if (!byte)
 		return (NULL);
@@ -30,7 +29,6 @@ char	*char_to_byte(char c)
 		i++;
 	}
 	byte[8] = '\0';
-	printf("BYTE: %s\n", byte);
 	return (byte);
 }
 
@@ -57,22 +55,17 @@ void send_char(pid_t server_pid, char c)
 
 int main(int argc, char **argv) {
 	char	*msg;
-	pid_t server_pid;
+	int server_pid;
 
     if (argc != 3)
 	{
         write(2, "Usage: ./client <server_pid> <message>\n", 40);
         return 1;
     }
-
     server_pid = (pid_t)atoi(argv[1]);
     msg = argv[2];
-
-	printf("MESSAGE TO SEND: %s\n", msg);
 	while (*msg)
-	{
 		send_char(server_pid, *msg++);
-	}
     send_char(server_pid, '\0');
     return 0;
 }
