@@ -5,21 +5,31 @@
 
 char	*char_to_byte(char c)
 {
-	char	*byte;
-	int		a;
-	int		i;
+	unsigned char	a;
+	char			*byte;
+	int				i;
+	int				pow;
+
 
 	byte = (char *)calloc(9, sizeof(char));
 	if (!byte)
 		return (NULL);
 	a = (unsigned char)c;
-	i = 7;
-	while (i >= 0)
+	i = 0;
+	pow = 128;
+	while (i < 8)
 	{
-		byte[i] = (a % 2) + '0';
-		a /= 2;
-		i--;
+		if (a >= pow)
+		{
+			byte[i] = '1';
+			a -= pow;
+		}
+		else
+			byte[i] = '0';
+		pow /= 2;
+		i++;
 	}
+	byte[8] = '\0';
 	printf("BYTE: %s\n", byte);
 	return (byte);
 }
@@ -40,6 +50,7 @@ void send_char(pid_t server_pid, char c)
 		if (*tmp == '1')
 			kill(server_pid, SIGUSR2);
 		tmp++;
+		sleep(1);
 	}
 	free(byte);
 }
