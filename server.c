@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <ctype.h>
 
 static int byte_read = 0;
 
@@ -27,7 +26,8 @@ char	byte_to_char(char *byte)
 
 void	signal_handler(int sig)
 {
-	static char	*byte = NULL;
+	static char	*byte;
+	char		c;
 
 	if (!byte)
 	{
@@ -38,20 +38,16 @@ void	signal_handler(int sig)
 	if (byte_read < 8)
 	{
 		if (sig == SIGUSR1)
-		{
 			byte[byte_read] = '0';
-		}
 		else if (sig == SIGUSR2)
-		{
 			byte[byte_read] = '1';
-		}
 		byte_read++;
 	}
 	if (byte_read == 8)
 	{
-		char ch = byte_to_char(byte);
-		if (ch != '\0')
-			write(1, &ch, 1);
+		c = byte_to_char(byte);
+		if (c != '\0')
+			write(1, &c, 1);
 		else
 			write(1, "\n", 1);
 		byte_read = 0;
