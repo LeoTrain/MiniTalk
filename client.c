@@ -12,31 +12,36 @@ char	*char_to_byte(char c)
 	byte = (char *)calloc(9, sizeof(char));
 	if (!byte)
 		return (NULL);
-	a = c;
-	i = 0
-	while (a > 0)
+	a = (unsigned char)c;
+	i = 7;
+	while (i >= 0)
 	{
-		byte[i++] = a % 2;
+		byte[i] = (a % 2) + '0';
 		a /= 2;
+		i--;
 	}
+	printf("BYTE: %s\n", byte);
 	return (byte);
 }
 
 void send_char(pid_t server_pid, char c)
 {
 	char	*byte;
+	char	*tmp;
 
 	byte = char_to_byte(c);
 	if (!byte)
 		return ;
-	while (*byte)
+	tmp = byte;
+	while (*tmp)
 	{
-		if (*byte == '0')
+		if (*tmp == '0')
 			kill(server_pid, SIGUSR1);
-		if (*byte == '1')
+		if (*tmp == '1')
 			kill(server_pid, SIGUSR2);
-		byte++;
+		tmp++;
 	}
+	free(byte);
 }
 
 int main(int argc, char **argv) {
@@ -52,14 +57,13 @@ int main(int argc, char **argv) {
     server_pid = (pid_t)atoi(argv[1]);
     msg = argv[2];
 
-    while (*msg)
+	printf("MESSAGE TO SEND: %s\n", msg);
+	while (*msg)
 	{
-        send_char(server_pid, *msg++);
+		send_char(server_pid, *msg++);
 		sleep(1);
-
 	}
     send_char(server_pid, '\0');
-
     return 0;
 }
 
