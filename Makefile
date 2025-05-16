@@ -4,19 +4,25 @@ SRV_SRC = server.c
 CLI_SRC = client.c
 SRV_BIN = server
 CLI_BIN = client
+LIBFT=libft/libft.a
 
-all: $(SRV_BIN) $(CLI_BIN)
+all: $(LIBFT) $(SRV_BIN) $(CLI_BIN)
 
-$(SRV_BIN): $(SRV_SRC)
-	$(CC) $(FLAGS) $(SRV_SRC) -o $(SRV_BIN)
+$(LIBFT):
+	make -C libft
 
-$(CLI_BIN): $(CLI_SRC)
-	$(CC) $(FLAGS) $(CLI_SRC) -o $(CLI_BIN)
+$(SRV_BIN): $(SRV_SRC) $(LIBFT) minitalk.h
+	$(CC) $(FLAGS) $(SRV_SRC) minitalk_utils.c -Llibft -lft -o $(SRV_BIN)
+
+$(CLI_BIN): $(CLI_SRC) $(LIBFT) minitalk.h
+	$(CC) $(FLAGS) $(CLI_SRC) minitalk_utils.c -Llibft -lft -o $(CLI_BIN)
 
 clean:
 	rm -f $(SRV_BIN) $(CLI_BIN)
+	make -C libft clean
 
 fclean: clean
+	make -C libft fclean
 
 re: fclean all
 

@@ -1,40 +1,13 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
+#include "libft/libft.h"
+#include "minitalk.h"
 
 static int byte_read = 0;
 
-char	byte_to_char(char *byte)
-{
-	int		i;
-	int		pow;
-	char	result;
-
-	result = 0;
-	pow = 1;
-	i = 7;
-	while (i >= 0)
-	{
-		if (byte[i] == '1')
-			result += pow;
-		pow *= 2;
-		i--;
-	}
-	return ((char)result);
-}
-
 void	signal_handler(int sig)
 {
-	static char	*byte;
+	static char	byte[9];
 	char		c;
 
-	if (!byte)
-	{
-		byte = (char *)calloc(9, sizeof(char));
-		if (!byte)
-			return ;
-	}
 	if (byte_read < 8)
 	{
 		if (sig == SIGUSR1)
@@ -51,8 +24,7 @@ void	signal_handler(int sig)
 		else
 			write(1, "\n", 1);
 		byte_read = 0;
-		free(byte);
-		byte = NULL;
+		ft_bzero((void *)byte, sizeof(byte));
 	}
 }
 
@@ -62,4 +34,6 @@ int main()
 	signal(SIGUSR2, signal_handler);
 	printf("MY PID: %d\n", getpid());
 	while (1);
+		// pause();
+	return (0);
 }
