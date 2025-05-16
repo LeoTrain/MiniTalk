@@ -50,7 +50,7 @@ void send_char(pid_t server_pid, char c)
 		if (*tmp == '1')
 			kill(server_pid, SIGUSR2);
 		tmp++;
-		sleep(1);
+		usleep(1);
 	}
 	free(byte);
 }
@@ -72,7 +72,6 @@ int main(int argc, char **argv) {
 	while (*msg)
 	{
 		send_char(server_pid, *msg++);
-		sleep(1);
 	}
     send_char(server_pid, '\0');
     return 0;
