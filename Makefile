@@ -9,7 +9,7 @@ LIBFT=libft/libft.a
 all: $(LIBFT) $(SRV_BIN) $(CLI_BIN)
 
 $(LIBFT):
-	make -C libft
+	@make -C libft
 
 $(SRV_BIN): $(SRV_SRC) $(LIBFT) minitalk.h
 	$(CC) $(FLAGS) $(SRV_SRC) minitalk_utils.c -Llibft -lft -o $(SRV_BIN)
@@ -19,10 +19,10 @@ $(CLI_BIN): $(CLI_SRC) $(LIBFT) minitalk.h
 
 clean:
 	rm -f $(SRV_BIN) $(CLI_BIN)
-	make -C libft clean
+	@make -C libft clean
 
 fclean: clean
-	make -C libft fclean
+	@make -C libft fclean
 
 re: fclean all
 
